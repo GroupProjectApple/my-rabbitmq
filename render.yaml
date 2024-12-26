@@ -5,6 +5,10 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: / # Render requires this, but it’s tied to the HTTP port (15672)
+    ports:
+  - port: 5672
+    protocol: tcp
+
     envVars:
       - key: RABBITMQ_DEFAULT_USER
         value: admin

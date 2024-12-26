@@ -1,16 +1,16 @@
-# Use RabbitMQ base image
+# Use the official RabbitMQ image
 FROM rabbitmq:3-management
 
-# Install NGINX with stream module
-RUN apt-get update && apt-get install -y nginx-extras && apt-get clean
+# Set default RabbitMQ credentials
+ENV RABBITMQ_DEFAULT_USER=admin
+ENV RABBITMQ_DEFAULT_PASS=admin123
 
-# Copy the configuration files
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+# Copy the custom configuration file
+COPY rabbitmq.conf /etc/rabbitmq/rabbitmq.conf
 
-# Expose required ports
-EXPOSE 5672 15672 8080
+# Expose the required ports
+EXPOSE 5672
+EXPOSE 15672
 
-# Start RabbitMQ and NGINX
-CMD ["/usr/local/bin/start.sh"]
+# Start RabbitMQ server
+CMD ["rabbitmq-server"]

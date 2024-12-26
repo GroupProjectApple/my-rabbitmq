@@ -2,7 +2,7 @@
 FROM rabbitmq:3-management
 
 # Install NGINX
-RUN apt-get update && apt-get install -y nginx && apt-get clean
+RUN apt-get update && apt-get install -y nginx-extras && apt-get clean
 
 # Copy NGINX configuration to the container
 COPY nginx.conf /etc/nginx/sites-enabled/default

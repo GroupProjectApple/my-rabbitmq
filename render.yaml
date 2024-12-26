@@ -4,14 +4,18 @@ services:
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
+    healthCheckPath: /  # Render requires this, but it’s tied to the HTTP port (15672)
     ports:
-      - port: 5672
-        protocol: tcp
       - port: 15672
-        protocol: http
-    healthCheckPath: /
+        protocol: http  # For the RabbitMQ Management UI
+      - port: 5672
+        protocol: tcp  # For AMQP client connections
     envVars:
       - key: RABBITMQ_DEFAULT_USER
         value: admin
       - key: RABBITMQ_DEFAULT_PASS
         value: admin123
+      - key: RABBITMQ_CONFIG_LISTENERS_TCP_DEFAULT
+        value: "5672"  # Bind AMQP listener to this port
+      - key: RABBITMQ_CONFIG_MANAGEMENT_LISTENER_PORT
+        value: "15672"  # Bind Management UI to this port

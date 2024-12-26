@@ -9,7 +9,7 @@ services:
       - port: 15672
         protocol: http  # For the RabbitMQ Management UI
       - port: 5672
-        protocol: tcp  # For AMQP client connections
+        protocol: amqp  # For AMQP client connections
     envVars:
       - key: RABBITMQ_DEFAULT_USER
         value: admin

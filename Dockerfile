@@ -1,16 +1,25 @@
-# Use the official RabbitMQ image with management plugins
+# Use RabbitMQ base image
 FROM rabbitmq:3-management
 
-# Set default RabbitMQ credentials
-ENV RABBITMQ_DEFAULT_USER=admin
-ENV RABBITMQ_DEFAULT_PASS=admin123
+# Add NGINX to block non-AMQP traffic
+RUN apt-get update && apt-get install -y nginx
 
-# Hardcode RabbitMQ configuration using environment variables
-ENV RABBITMQ_CONFIG_LISTENERS_TCP_DEFAULT=5672
-ENV RABBITMQ_CONFIG_MANAGEMENT_LISTENER_PORT=15672
+# Create NGINX config to allow only HTTP traffic to 15672
+RUN echo "
+server {
+    listen 80;
+    location / {
+        proxy_pass http://127.0.0.1:15672;
+    }
+}
 
-# Expose the necessary ports
-EXPOSE 5672
-EXPOSE 15672
+server {
+    listen 5672;
+    return 403;  # Deny all non-AMQP traffic to 5672
+}" > /etc/nginx/sites-available/default
 
-CMD ["rabbitmq-server", "--port", "5672", "--management.port", "15672"]
+# Expose ports
+EXPOSE 5672 15672
+
+# Start NGINX and RabbitMQ
+CMD service nginx start && rabbitmq-server

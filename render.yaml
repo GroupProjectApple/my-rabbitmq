@@ -1,0 +1,17 @@
+services:
+  - name: rabbitmq
+    type: web
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    ports:
+      - port: 5672
+        protocol: tcp
+      - port: 15672
+        protocol: http
+    healthCheckPath: /
+    envVars:
+      - key: RABBITMQ_DEFAULT_USER
+        value: admin
+      - key: RABBITMQ_DEFAULT_PASS
+        value: admin123

@@ -12,7 +12,7 @@ COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
 # Expose RabbitMQ ports
-EXPOSE 5672 15672
+EXPOSE 15672
 
 # Start RabbitMQ and NGINX
 CMD ["/usr/local/bin/start.sh"]

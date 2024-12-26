@@ -4,7 +4,7 @@ services:
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /  # Render requires this, but it’s tied to the HTTP port (15672)
+    healthCheckPath: http://my-rabbitmq.onrender.com:15672 # Render requires this, but it’s tied to the HTTP port (15672)
     ports:
       - port: 15672
         protocol: http  # For the RabbitMQ Management UI
